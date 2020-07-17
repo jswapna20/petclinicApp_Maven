@@ -14,7 +14,7 @@ import com.petclinic.entity.PetOwner;
 import com.petclinic.entity.Visit;
 
    @Repository
-   public class PetDao extends BaseDao{
+   public class PetDao extends BaseDao{ 
 		 /*private static SessionFactory sessionFactory;
 
 		 public static void main(String[] args){
