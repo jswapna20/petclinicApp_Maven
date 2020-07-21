@@ -15,19 +15,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.petclinic.dao.PetDao;
 import com.petclinic.dto.PetnOwnerDto;
 import com.petclinic.entity.Pet;
 import com.petclinic.entity.PetOwner;
 import com.petclinic.entity.Visit;
+import com.petclinic.service.PetService;
 
 
+/**
+ * 
+ * @author Swapna
+ *
+ */
 	@Controller
 	public class PetController{
 				
 		@Autowired
-		PetDao pdao;
+		PetService petService;
 		//Displays the first Pet Management page	
+		/**
+		 * 
+		 * @return
+		 */
 		@RequestMapping("/petsearch")
 		public ModelAndView petsrch(){
 				
@@ -57,7 +66,7 @@ import com.petclinic.entity.Visit;
 
 			Collection<Pet> npet = new ArrayList<Pet>();
 			String petName = pet.getPetName();
-			npet = pdao.getPetDetails(petName);
+			npet = petService.getPetDetails(pet.getPetName());
 
 			ModelAndView mv = new ModelAndView("link");
 			mv.addObject("npet", npet);
@@ -70,9 +79,9 @@ import com.petclinic.entity.Visit;
 					
 			Collection<PetOwner> npetOwner =  new ArrayList<PetOwner>();
 			Collection<Pet> pt = new ArrayList<Pet>();
-			String OwnerName = owner.getOwnerName();
+			String ownerName = owner.getOwnerName();
 					
-			npetOwner = pdao.getPetOwnerDetails(OwnerName);
+			npetOwner = petService.getPetOwnerDetails(ownerName);
 					
 			ModelAndView mv = new ModelAndView("link");
 			mv.addObject("npetOwner", npetOwner);
@@ -107,7 +116,7 @@ import com.petclinic.entity.Visit;
 
 			 PetOwner petOwner = new PetOwner();
 			 Integer poid = pet.getPoid();
-			 PetOwner po = pdao.getPetOwner(poid);
+			 PetOwner po = petService.getPetOwner(poid);
 
 					if(result.hasErrors()){
 						Pet newPet = new Pet();
@@ -124,7 +133,7 @@ import com.petclinic.entity.Visit;
 						PetOwner pr = null;
 						
 						PetOwner pto1 = new PetOwner(po.getOwnerName(),po.getAddress(), po.getCity(),po.getTelephone(), hs);
-						pdao.updatePetOwnerWithPet(poid, pto1,hs);
+						petService.updatePetOwnerWithPet(poid, pto1,hs);
 									 
 						ModelAndView mv = new ModelAndView("addPets");
 							mv.addObject("petTest", pet);
@@ -156,7 +165,7 @@ import com.petclinic.entity.Visit;
 	             	}
 							
 					else{
-						 Integer owner_coll = pdao.addPetOwner(petOwner);
+						 Integer owner_coll = petService.addPetOwner(petOwner);
 						 ModelAndView mv = new ModelAndView("addPetOwner");
 						 mv.addObject("ownerTest",petOwner);
 						 return mv;
@@ -169,7 +178,7 @@ import com.petclinic.entity.Visit;
 		public ModelAndView owners(@ModelAttribute("PetOwner") PetOwner owner, BindingResult result, HttpSession session){
 
 			String ownerName = owner.getOwnerName();
-			Collection<PetOwner> ownerColl = pdao.getPetOwnerDetails(ownerName);
+			Collection<PetOwner> ownerColl = petService.getPetOwnerDetails(ownerName);
 					
 			ModelAndView mv = new ModelAndView("owners");
 				mv.addObject("ownerColl", ownerColl);
@@ -183,7 +192,7 @@ import com.petclinic.entity.Visit;
 			Integer pid = pet.getPid();
 			System.out.println("outside inside petview controller, value of pet pid" +pid);
 			
-			Pet npet = pdao.getPet(pid);
+			Pet npet = petService.getPet(pid);
 			System.out.println("else part inside petview controller, value of npet" +npet);
 
 			//Brings the page to main Pet Management page on clicking cancel button after deleting the Pet
@@ -217,7 +226,7 @@ import com.petclinic.entity.Visit;
 		@RequestMapping(value="/linkOwner")
 		public ModelAndView ownerView(PetOwner owner ,BindingResult result, HttpSession session){
 			Integer oid = owner.getOid();
-			PetOwner petOwner = pdao.getPetOwner(oid);
+			PetOwner petOwner = petService.getPetOwner(oid);
 			System.out.println("outside, ownerView controller, value of pet" +petOwner);
 			
 			//Brings the page to main Pet Management page on clicking cancel button after deleting the PetOwner
@@ -248,7 +257,7 @@ import com.petclinic.entity.Visit;
 			PetnOwnerDto petnOwnerDto = new PetnOwnerDto();
 			Collection<Visit> nvisit = new ArrayList<Visit>();
 
-			pet = pdao.getPet(pid);
+			pet = petService.getPet(pid);
 			nvisit = pet.getVisits();
 			
 			ModelAndView mv = new ModelAndView("Visitation");
@@ -267,7 +276,7 @@ import com.petclinic.entity.Visit;
 			Collection<Visit> nvisit = new ArrayList<Visit>();
 			Visit testVisit = null;
 
-			pet = pdao.getPet(pid);
+			pet = petService.getPet(pid);
 	
 			nvisit = pet.getVisits();
 				
@@ -292,8 +301,8 @@ import com.petclinic.entity.Visit;
 			 List<Visit> hs = new ArrayList();
 				 hs.add(visit);
 			
-			 pdao.updatePetWithVisits(pid, hs);
-			 pet = pdao.getPet(pid);
+			 petService.updatePetWithVisits(pid, hs);
+			 pet = petService.getPet(pid);
 
 			ModelAndView mv = new ModelAndView("visit");
 				mv.addObject("pet", pet);
@@ -309,7 +318,7 @@ import com.petclinic.entity.Visit;
 			PetOwner po = null;
 			PetOwner ownerObject = null;
 				
-			po = pdao.getPetOwner(oid);
+			po = petService.getPetOwner(oid);
 
 			ModelAndView mv = new ModelAndView("ownerUpdateForm");
 				mv.addObject("po", po);
@@ -327,7 +336,7 @@ import com.petclinic.entity.Visit;
 			String city = owner.getCity();
 			String telephone = owner.getTelephone();
 				
-			ownerObject = pdao.updatePetOwner(oid, name, address, city, telephone);
+			ownerObject = petService.updatePetOwner(oid, name, address, city, telephone);
 
 			ModelAndView mv = new ModelAndView("ownerUpdateForm");
 				mv.addObject("po", owner);
@@ -344,7 +353,7 @@ import com.petclinic.entity.Visit;
 			Pet petObject = new Pet();
 			String ownername = null;
 
-			pet = pdao.getPet(pid);
+			pet = petService.getPet(pid);
 			po = pet.getPetOwner();
 			ownername = po.getOwnerName();
 			
@@ -363,7 +372,7 @@ import com.petclinic.entity.Visit;
 			String type = pet.getType();
 			String date = pet.getBirthdate();
 
-			Pet petUpdate = pdao.updatePet(pid,pname, type,date);
+			Pet petUpdate = petService.updatePet(pid,pname, type,date);
 		
 			ModelAndView mv = new ModelAndView("petUpdate");
 				mv.addObject("petObject", pet);	
@@ -378,7 +387,7 @@ import com.petclinic.entity.Visit;
 			PetOwner po = null;
 			String ownername = null;
 
-			pet = pdao.getPet(pid);
+			pet = petService.getPet(pid);
 			po = pet.getPetOwner();
 			ownername = po.getOwnerName();
 			
@@ -393,7 +402,7 @@ import com.petclinic.entity.Visit;
 		public ModelAndView deletePetOwnerForm(PetOwner petOwner){
 			int oid = petOwner.getOid();
 			PetOwner po = null;
-			po = pdao.getPetOwner(oid);
+			po = petService.getPetOwner(oid);
 			
 			ModelAndView mv = new ModelAndView("petOwnerDeleteForm");
 				mv.addObject("petOwner", po);
@@ -407,8 +416,8 @@ import com.petclinic.entity.Visit;
 				int oid = petOwner.getOid();
 				PetOwner poDao = null;
 
-				poDao = pdao.getPetOwner(oid);
-				pdao.deletePetOwner(oid);
+				poDao = petService.getPetOwner(oid);
+				petService.deletePetOwner(oid);
 
 				ModelAndView mv = new ModelAndView("petOwnerDeleteForm");
 					mv.addObject("petOwner", poDao);
@@ -422,12 +431,12 @@ import com.petclinic.entity.Visit;
 				int pid = pet.getPid();
 				PetOwner po = null;
 
-				Pet ptdao = pdao.getPet(pid);
-				pdao.deleteVisitHistory(pid);
+				Pet ptdao = petService.getPet(pid);
+				petService.deleteVisitHistory(pid);
 				
 				po = ptdao.getPetOwner();
 				Integer oid = po.getOid();
-				pdao.deletePetFromOwner(oid, ptdao);
+				petService.deletePetFromOwner(oid, ptdao);
 			
 				ModelAndView mv = new ModelAndView("petDelete");
 					mv.addObject("petTest", ptdao);	

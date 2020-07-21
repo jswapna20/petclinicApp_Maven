@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.petclinic.dao.VetDao;
 import com.petclinic.dto.VetDto;
 import com.petclinic.entity.Speciality;
 import com.petclinic.entity.Vet;
+import com.petclinic.service.VetService;
 
 
 @Controller
@@ -26,7 +26,7 @@ import com.petclinic.entity.Vet;
 public class VetController{
 
 	@Autowired
-	VetDao vdao;
+	VetService vetService;
 
 	@RequestMapping(value="/searchVet", method=RequestMethod.POST)
 	public ModelAndView vetName(@ModelAttribute("vetDto") VetDto vetDto, BindingResult result, HttpSession session){
@@ -49,7 +49,7 @@ public class VetController{
 			Vet vetObject = new Vet();
 
 
-			specialityColl = vdao.getSpeciality(specialityName);
+			specialityColl = vetService.getSpeciality(specialityName);
 			System.out.println("in vetController entry!!!!!!!!!!!! chk specialityColl value afetr cmng fro dao" +specialityColl.size());
 
 			for (Speciality spObject : specialityColl )
@@ -65,7 +65,7 @@ public class VetController{
 
 			// vetName //
 			Collection<Speciality> sp = new ArrayList<Speciality>();
-			Collection<Vet> vetColl = vdao.getVet(vetName);
+			Collection<Vet> vetColl = vetService.getVet(vetName);
 
 			System.out.println("in vetController entry!!!!!!!!!!!! chk vetColl value afetr cmng fro dao" +vetColl.size());
 

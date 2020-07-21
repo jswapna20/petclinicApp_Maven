@@ -1,6 +1,6 @@
-   package com.petclinic.dao;
+package com.petclinic.dao;
 
-   import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,9 +15,9 @@ import com.petclinic.entity.Vet;
 
 
 
-	@Repository
-	public class VetDao extends BaseDao {
-		/*private static SessionFactory sessionFactory;
+@Repository
+public class VetDao extends BaseDao {
+	/*private static SessionFactory sessionFactory;
 
 		  public static void main(String[] args){
 				try
@@ -30,7 +30,7 @@ import com.petclinic.entity.Vet;
 				}
 
 				VetDao vd = new VetDao();
-	
+
 				List<Speciality> sp1 = new ArrayList<Speciality>();
 				sp1.add(new Speciality("Dermatology"));
 				sp1.add (new Speciality("Behaviour"));
@@ -48,7 +48,7 @@ import com.petclinic.entity.Vet;
 				List<Speciality> sp5 = new ArrayList<Speciality>();
 				sp5.add(new Speciality("Dentistry"));
 
-			
+
 				List<Speciality> sp6 = new ArrayList<Speciality>();
 				sp6.add(new Speciality("Dermatology"));
 				sp6.add (new Speciality("Behaviour"));
@@ -65,113 +65,113 @@ import com.petclinic.entity.Vet;
 			}*/
 
 
-		public Collection<Vet> getVet(String vetName){
-				Session session = sessionFactory.openSession();
-				Transaction tx = null;
-				List<Vet> result = new ArrayList<Vet>();
+	public Collection<Vet> getVet(String vetName){
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		List<Vet> result = new ArrayList<Vet>();
 
-				try
-				{
-					tx = session.beginTransaction();
-					Query query = session.createQuery("From com.petclinic.entity.Vet where vetName like ?");
-					query.setString(0, "%"+vetName +"%");
-					result = query.list();
-					tx.commit();
-				}
-				catch(HibernateException e)
-				{
-					if(tx!= null)
-						tx.rollback();
-					System.out.println(e);
-				} 
-				finally
-				{
-					session.close();
-				}
-				return result;
-				
+		try
+		{
+			tx = session.beginTransaction();
+			Query query = session.createQuery("From com.petclinic.entity.Vet where vetName like ?");
+			query.setString(0, "%"+vetName +"%");
+			result = query.list();
+			tx.commit();
 		}
-
-		public Integer addVet(Vet vet){
-				Session session = sessionFactory.openSession();
-				Transaction tx = null;
-				Integer id = null;
-				try
-				{
-					tx = session.beginTransaction();
-					id = (Integer)session.save(vet);
-					System.out.println("showing entry of id :"+id);
-					tx.commit();
-				
-				}
-				catch(HibernateException e)
-				{
-					if(tx != null)
-						tx.rollback();
-					System.out.println(e);
-				
-				}
-				finally
-				{
-					System.out.println("Closing session");
-					session.close();
-				
-				}
-				return id;
-			}
-
-		public Integer addSpeciality(Speciality speciality){
-			
-				Session session = sessionFactory.openSession();
-				Transaction tx = null;
-				Integer id = null;
-				try
-				{
-					tx = session.beginTransaction();
-					id = (Integer)session.save(speciality);
-					tx.commit();
-				}
-				catch(HibernateException e)
-				{
-					if(tx != null)
-						tx.rollback();
-					System.out.println(e);
-				}
-				finally
-				{
-					System.out.println("Closing session addSpeciality");
-					session.close();
-				}
-				return id;
-			
+		catch(HibernateException e)
+		{
+			if(tx!= null)
+				tx.rollback();
+			System.out.println(e);
+		} 
+		finally
+		{
+			session.close();
 		}
-
-		public Collection<Speciality> getSpeciality(String specialityName){
-				Session session = sessionFactory.openSession();
-				Transaction tx = null;
-				String speciality_name = null;
-				List<Speciality> result = new ArrayList<Speciality>();
-					
-				try
-				{
-					tx = session.beginTransaction();
-					Query query = session.createQuery("From com.petclinic.entity.Speciality where specialityName like ?");
-					query.setString(0,"%"+specialityName+"%");
-					result = query.list();
-					tx.commit();
-				}
-				catch(HibernateException e)
-				{
-					if(tx!= null)
-						tx.rollback();
-					System.out.println(e);
-				} 
-				finally
-				{
-					session.close();
-				}
-				return result;
-		}
+		return result;
 
 	}
-			
+
+	public Integer addVet(Vet vet){
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		Integer id = null;
+		try
+		{
+			tx = session.beginTransaction();
+			id = (Integer)session.save(vet);
+			System.out.println("showing entry of id :"+id);
+			tx.commit();
+
+		}
+		catch(HibernateException e)
+		{
+			if(tx != null)
+				tx.rollback();
+			System.out.println(e);
+
+		}
+		finally
+		{
+			System.out.println("Closing session");
+			session.close();
+
+		}
+		return id;
+	}
+
+	public Integer addSpeciality(Speciality speciality){
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		Integer id = null;
+		try
+		{
+			tx = session.beginTransaction();
+			id = (Integer)session.save(speciality);
+			tx.commit();
+		}
+		catch(HibernateException e)
+		{
+			if(tx != null)
+				tx.rollback();
+			System.out.println(e);
+		}
+		finally
+		{
+			System.out.println("Closing session addSpeciality");
+			session.close();
+		}
+		return id;
+
+	}
+
+	public Collection<Speciality> getSpeciality(String specialityName){
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		String speciality_name = null;
+		List<Speciality> result = new ArrayList<Speciality>();
+
+		try
+		{
+			tx = session.beginTransaction();
+			Query query = session.createQuery("From com.petclinic.entity.Speciality where specialityName like ?");
+			query.setString(0,"%"+specialityName+"%");
+			result = query.list();
+			tx.commit();
+		}
+		catch(HibernateException e)
+		{
+			if(tx!= null)
+				tx.rollback();
+			System.out.println(e);
+		} 
+		finally
+		{
+			session.close();
+		}
+		return result;
+	}
+
+}
+
