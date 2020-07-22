@@ -11,7 +11,7 @@ import com.petclinic.entity.Speciality;
 import com.petclinic.entity.Vet;
 
 @Service
-public class VetService {
+public class VetService { 
 	@Autowired
 	VetDao vdao;
 
